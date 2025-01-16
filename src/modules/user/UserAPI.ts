@@ -1,10 +1,10 @@
-import api from "../../utils/axios";
+import { apiInterceptor } from "../../utils/axios";
 
 import { User } from "../../interfaces/User";
 
 export const fetchUsers = async ({ pageParam = 1 }): Promise<{ users: User[], nextPage: number   | null }> => {
     try {
-      const response = await api.get(`/users`, { params: { page: pageParam, per_page: 15 } });
+      const response = await apiInterceptor.get(`/users`, { params: { page: pageParam, per_page: 15 } });
       const data = response.data;
 
       const nextPageUrl = response.headers['x-links-next'] || null;

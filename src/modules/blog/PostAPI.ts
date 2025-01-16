@@ -1,4 +1,4 @@
-import api from "../../utils/axios";
+import { api } from "../../utils/axios";
 import { Post } from "../../interfaces/Post";
 
 export const fetchPosts = async ({ pageParam = 1 }): Promise<{ posts: Post[], nextPage: number | null }> => {

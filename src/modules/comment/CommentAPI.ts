@@ -1,9 +1,9 @@
-import api from "../../utils/axios";
+import { apiInterceptor } from "../../utils/axios";
 import { Comment } from "../../interfaces/Comment";
 
 export const fetchPostComment = async ({ pageParam = 1 }, postId: string): Promise<{ comments: Comment[], nextPage: number | null }> => {
     try {
-      const response = await api.get(`/posts/${postId}/comments`, { params: { page: pageParam, per_page: 9 } });
+      const response = await apiInterceptor.get(`/posts/${postId}/comments`, { params: { page: pageParam, per_page: 9 } });
       const data = response.data;
   
       const nextPageUrl = response.headers['x-links-next'] || null;
