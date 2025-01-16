@@ -1,7 +1,22 @@
 import axios from "axios";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: "https://gorest.co.in/public/v2",
 });
 
-export default api;
+export const apiInterceptor = axios.create({
+  baseURL: "https://gorest.co.in/public/v2",
+});
+
+apiInterceptor.interceptors.response.use(
+  (response) => {
+    const totalCount = response.headers['x-count-total'];
+    if (totalCount) {
+      response.data.totalCount = totalCount;
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
