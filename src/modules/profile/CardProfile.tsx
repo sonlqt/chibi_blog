@@ -12,7 +12,7 @@ const CardProfile: React.FC<CardProfileProps> = ({ userId }) => {
     ["user", userId], 
     () => fetchUser(userId), 
     {
-      staleTime: 1000 * 60 * 5, 
+      staleTime: 1000 * 60 * 5, //này là mình cache cái profile 5p á - sau 5p cút
       retry: 2, 
     }
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPostDetail } from "./PostDetailAPI";
+import { fetchUser } from "../profile/ProfileAPI";
 import { Post } from "../../interfaces/Post";
 
 interface PostDetailProps {

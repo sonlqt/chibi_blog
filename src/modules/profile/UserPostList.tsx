@@ -2,13 +2,14 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUserPosts } from "./ProfileAPI";
 import Card from "../../components/CardPost";
 import { Post } from "../../interfaces/Post";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface PostListProps {
   userId: string;
+  isProfilePage?: boolean;
 }
 
-const PostList: React.FC<PostListProps> = ({ userId }) => {
+const PostList: React.FC<PostListProps> = ({ userId, isProfilePage }) => {
   const {
     data,
     isLoading,
@@ -18,12 +19,26 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
     hasNextPage,
   } = useInfiniteQuery(
     ["userPosts", userId],
-    ({ pageParam = 1 }) => fetchUserPosts({ pageParam }, userId), 
+    ({ pageParam = 1 }) => fetchUserPosts({ pageParam }, userId),
     {
       getNextPageParam: (lastPage) => lastPage.nextPage || null,
       keepPreviousData: true,
     }
   );
+
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    // Flatten all pages and set the posts to state
+    if (data) {
+      const allPosts = data.pages.flatMap((page) => page.posts);
+      setPosts(allPosts);
+    }
+  }, [data]);
+
+  const handlePostDeleted = (deletedPostId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== deletedPostId));
+  };
 
   const handleScroll = () => {
     if (
@@ -52,9 +67,14 @@ const PostList: React.FC<PostListProps> = ({ userId }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-        {data?.pages?.map((page) =>
-          page.posts.map((post: Post) => <Card key={post.id} post={post} />)
-        )}
+        {posts.map((post: Post) => (
+          <Card
+            key={post.id}
+            post={post}
+            isProfilePage={isProfilePage}
+            onPostDeleted={handlePostDeleted} // Pass the deletion handler
+          />
+        ))}
 
         {isFetching && <p>Loading more posts...</p>}
 

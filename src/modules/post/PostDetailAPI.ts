@@ -1,9 +1,9 @@
-import { apiInterceptor } from "../../utils/axios";
+import { api } from "../../utils/axios";
 import { Post } from "../../interfaces/Post";
 
 export const fetchPostDetail = async (postId: string): Promise<Post> => {
     try {
-      const response = await apiInterceptor.get(`/posts/${postId}`);
+      const response = await api.get(`/posts/${postId}`);
       const user = response.data;
       return user;
     } catch (error) {

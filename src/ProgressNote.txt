@@ -2,7 +2,7 @@ Quy định
 1. Sai 1 bug = 5 lần hít đất
 2. Cần cải thiện 1 lỗi = 1 lần hít đất
 
-[Tính tới giờ đã hít đất 3 lần trong lúc code]
+[Tính tới giờ đã hít đất 5 lần trong lúc code]
 
 15/1/2025 
 Post-Commit
@@ -12,3 +12,5 @@ Post-Commit
 3. Thiếu handle lỗi trong CardProfile, và thay = react query (done)
 
 16/1/2025
+1. Thay sai Intercecptors, thay lại cho x-links-next (done)
+2. Page param 9 -> 10 (done)
