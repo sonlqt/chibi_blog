@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
         {/* Right section for PostList */}
         <div className="flex-1 overflow-auto">
           <h2 className="text-2xl font-bold mb-4">User's Posts</h2>
-          <PostList userId={userId!} />
+          <PostList userId={userId!} isProfilePage={true} /> 
         </div>
       </div>
     </div>

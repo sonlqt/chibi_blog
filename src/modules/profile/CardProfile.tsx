@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "./ProfileAPI";
 import { User } from "../../interfaces/User";
 
@@ -7,33 +8,26 @@ interface CardProfileProps {
 }
 
 const CardProfile: React.FC<CardProfileProps> = ({ userId }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        setIsLoading(true);
-        const fetchedUser = await fetchUser(userId);
-        setUser(fetchedUser);
-      } catch (error) {
-        setIsError(true);
-        console.error("Failed to fetch user:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadUser();
-  }, [userId]);
+  const { data: user, isLoading, isError, error } = useQuery<User, Error>(
+    ["user", userId], 
+    () => fetchUser(userId), 
+    {
+      staleTime: 1000 * 60 * 5, //này là mình cache cái profile 5p á - sau 5p cút
+      retry: 2, 
+    }
+  );
 
   if (isLoading) {
     return <div>Loading user profile...</div>;
   }
 
   if (isError) {
-    return <div>Failed to load user profile. Please try again later.</div>;
+    return (
+      <div>
+        <p>Failed to load user profile. Please try again later.</p>
+        <p>Error: {error?.message}</p>
+      </div>
+    );
   }
 
   if (!user) {
@@ -45,7 +39,9 @@ const CardProfile: React.FC<CardProfileProps> = ({ userId }) => {
       {/* Avatar */}
       <div className="flex justify-center mb-4">
         <img
-          src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoX8ABsoVvsYw0kdLSCa-hqxEZfAbXtfVwNQ&s"}
+          src={
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoX8ABsoVvsYw0kdLSCa-hqxEZfAbXtfVwNQ&s"
+          }
           alt={"User avatar"}
           className="w-60 h-60 rounded-full border-2 border-gray-300 object-cover"
         />

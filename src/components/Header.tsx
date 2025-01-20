@@ -34,7 +34,7 @@ const HeaderNavbar: React.FC = () => {
           </li>
           <li>
             <NavLink
-              to="/create-post"
+              to="/posts/create"
               className={({ isActive }) =>
                 isActive ? "text-gray-300 underline" : "hover:text-gray-400"
               }
